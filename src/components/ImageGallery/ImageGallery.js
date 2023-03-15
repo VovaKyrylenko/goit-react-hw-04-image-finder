@@ -20,7 +20,7 @@ export function ImageGallery({ searchValue, setModalImage }) {
         setIsLast(true);
     }
     setParams();
-  }, [page]);
+  }, [page, images, searchValue]);
 
   useEffect(() => {
     if (searchValue === '') return;
