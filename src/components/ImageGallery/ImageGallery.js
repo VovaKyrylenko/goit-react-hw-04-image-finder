@@ -19,8 +19,8 @@ export function ImageGallery({ searchValue, setModalImage }) {
       if ([...images, ...newImages.hits].length === newImages.totalHits)
         setIsLast(true);
     }
-    setParams();
-  }, [page, images, searchValue]);
+    setParams(); // eslint-disable-next-line
+  }, [page]);
 
   useEffect(() => {
     if (searchValue === '') return;
