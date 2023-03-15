@@ -1,45 +1,36 @@
-import { PureComponent } from 'react';
 import SearchBar from './SearchBar/SearchBar';
 import { Notify } from 'notiflix';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Modal } from './Modal/Modal';
+import { useToggle } from 'hooks/useToggle';
+import { useState } from 'react';
 
-export class App extends PureComponent {
-  state = {
-    searchValue: '',
-    isOpenModal: false,
-    modalImage: '',
-  };
-  onSubmitForm = value => {
+export function App() {
+  const [searchValue, setSearchValue] = useState('');
+  const { isOpen, toggle } = useToggle();
+  const [modalImage, setModalImage] = useState(false);
+  const onSubmitForm = value => {
     if (value.trim() !== '') {
-      this.setState({ searchValue: value.toLowerCase() });
+      setSearchValue(value.toLowerCase());
     } else {
       Notify.failure('Input something!');
     }
   };
 
-  onToggleModal = () => {
-    this.setState(prev => ({ isOpenModal: !prev.isOpenModal }));
+  const onModal = img => {
+    setModalImage(img);
+    toggle();
   };
 
-  setModalImage = img => {
-    this.setState({ modalImage: img, isOpenModal: true });
-  };
-
-  render() {
-    return (
-      <>
-        <SearchBar onSubmit={this.onSubmitForm} />
-        <ImageGallery
-          searchValue={this.state.searchValue}
-          setModalImage={this.setModalImage}
-        />
-        {this.state.isOpenModal && (
-          <Modal onToggleModal={this.onToggleModal}>
-            <img src={this.state.modalImage} alt="" />
-          </Modal>
-        )}
-      </>
-    );
-  }
+  return (
+    <>
+      <SearchBar onSubmit={onSubmitForm} />
+      <ImageGallery searchValue={searchValue} setModalImage={setModalImage} />
+      {isOpen && (
+        <Modal onToggleModal={onModal}>
+          <img src={modalImage} alt="" />
+        </Modal>
+      )}
+    </>
+  );
 }
