@@ -61,17 +61,14 @@ export function ImageGallery({ searchValue, setModalImage }) {
       return (
         <>
           <ImageList>
-            {images.map(({ id, webformatURL }) => {
-              console.log('id:', id);
-              return (
-                <ImageGalleryItem
-                  key={id}
-                  webformatURL={webformatURL}
-                  id={id}
-                  onClick={onClickImage}
-                />
-              );
-            })}
+            {images.map(({ id, webformatURL }) => (
+              <ImageGalleryItem
+                key={id}
+                webformatURL={webformatURL}
+                id={id}
+                onClick={onClickImage}
+              />
+            ))}
           </ImageList>
           {!isLast && <Button onClick={incrementPage} />}
         </>
