@@ -12,19 +12,31 @@ export function ImageGallery({ searchValue, setModalImage }) {
   const [isLast, setIsLast] = useState(false);
 
   useEffect(() => {
-    if (searchValue === '') return;
-    async function setParams() {
-      const newImages = await getImages(searchValue, page);
-      setImages(images => [...images, ...newImages.hits]);
-      if ([...images, ...newImages.hits].length === newImages.totalHits)
-        setIsLast(true);
+    if (!searchValue || page === 1) return;
+    console.log('Ya TYT, a ty z nevikonanim dz, ');
+
+    async function fetchImages() {
+      try {
+        const { hits, totalHits } = await getImages(searchValue, page);
+
+        setImages(prevImages => [...prevImages, ...hits]);
+
+        if (hits.length === totalHits) {
+          setIsLast(true);
+        }
+      } catch (error) {
+        console.error(error);
+        setStatus('error');
+      }
     }
-    setParams(); // eslint-disable-next-line
+
+    fetchImages(); // eslint-disable-next-line
   }, [page]);
 
   useEffect(() => {
     if (searchValue === '') return;
     async function setParams() {
+      console.log('searchValue:', searchValue);
       setStatus('load');
       setPage(1);
       setIsLast(false);
@@ -35,10 +47,6 @@ export function ImageGallery({ searchValue, setModalImage }) {
   }, [searchValue]);
 
   const onClickImage = id => {
-    console.log(
-      'images.find(img => Number(img.id) === Number(id)).largeImageURL:',
-      images.find(img => Number(img.id) === Number(id)).largeImageURL
-    );
     setModalImage(
       images.find(img => Number(img.id) === Number(id)).largeImageURL
     );
@@ -76,6 +84,12 @@ export function ImageGallery({ searchValue, setModalImage }) {
           </ImageList>
           {!isLast && <Button onClick={incrementPage} />}
         </>
+      );
+    case 'error':
+      return (
+        <Relative>
+          <p>Failed to fetch images. Please try again later.</p>
+        </Relative>
       );
     default:
       console.log('Something went wrong');
