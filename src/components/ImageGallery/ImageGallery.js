@@ -35,6 +35,10 @@ export function ImageGallery({ searchValue, setModalImage }) {
   }, [searchValue]);
 
   const onClickImage = id => {
+    console.log(
+      'images.find(img => Number(img.id) === Number(id)).largeImageURL:',
+      images.find(img => Number(img.id) === Number(id)).largeImageURL
+    );
     setModalImage(
       images.find(img => Number(img.id) === Number(id)).largeImageURL
     );

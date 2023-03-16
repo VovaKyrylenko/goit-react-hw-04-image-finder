@@ -25,7 +25,7 @@ export function App() {
   return (
     <>
       <SearchBar onSubmit={onSubmitForm} />
-      <ImageGallery searchValue={searchValue} setModalImage={setModalImage} />
+      <ImageGallery searchValue={searchValue} setModalImage={onModal} />
       {isOpen && (
         <Modal onToggleModal={onModal}>
           <img src={modalImage} alt="" />
