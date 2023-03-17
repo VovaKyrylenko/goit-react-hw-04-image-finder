@@ -19,11 +19,12 @@ export function ImageGallery({ searchValue, setModalImage }) {
       try {
         const { hits, totalHits } = await getImages(searchValue, page);
 
-        setImages(prevImages => [...prevImages, ...hits]);
-
-        if (hits.length === totalHits) {
-          setIsLast(true);
-        }
+        setImages(prevImages => {
+          if ([...prevImages, ...hits].length === totalHits) {
+            setIsLast(true);
+          }
+          return [...prevImages, ...hits];
+        });
       } catch (error) {
         console.error(error);
         setStatus('error');
